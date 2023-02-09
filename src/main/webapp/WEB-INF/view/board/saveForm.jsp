@@ -41,9 +41,10 @@
                     },
                     dataType: "json"
                 }).done((res) => {
-                    alert("성공")
+                    alert(res.msg)
+                     location.href = "/";
                 }).fail((err) => {
-                    alert("실패")
+                    alert(err.responseJSON.msg);
                 });
             }
         </script>
