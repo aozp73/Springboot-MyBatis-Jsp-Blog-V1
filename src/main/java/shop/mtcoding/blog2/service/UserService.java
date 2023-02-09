@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import shop.mtcoding.blog2.dto.user.UserReq.UserJoinReqDto;
+import shop.mtcoding.blog2.dto.user.UserReq.UserLoginReqDto;
 import shop.mtcoding.blog2.handler.ex.CustomException;
 import shop.mtcoding.blog2.model.User;
 import shop.mtcoding.blog2.model.UserRepository;
@@ -28,5 +29,20 @@ public class UserService {
         } catch (Exception e) {
             throw new CustomException("일시적인 서버 문제가 발생했습니다", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    public User 로그인(UserLoginReqDto userLoginReqDto) {
+        // username 일치 확인
+        User principal = userRepository.findByUsername(userLoginReqDto.getUsername());
+        if (principal == null) {
+            throw new CustomException("아이디를 확인해주세요");
+        }
+        // password 일치 확인
+        if (!principal.getPassword().equals(userLoginReqDto.getPassword())) {
+            throw new CustomException("패스워드를 확인해주세요");
+        }
+
+        // session에 넣을 User 반환
+        return principal;
     }
 }
