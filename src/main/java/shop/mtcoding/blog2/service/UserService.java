@@ -2,6 +2,7 @@ package shop.mtcoding.blog2.service;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import shop.mtcoding.blog2.dto.user.UserReq.UserJoinReqDto;
@@ -10,12 +11,14 @@ import shop.mtcoding.blog2.handler.ex.CustomException;
 import shop.mtcoding.blog2.model.User;
 import shop.mtcoding.blog2.model.UserRepository;
 
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
 
+    @Transactional
     public void 회원가입(UserJoinReqDto userJoinReqDto) {
         // 아이디 존재 확인
         User principal = userRepository.findByUsername(userJoinReqDto.getUsername());

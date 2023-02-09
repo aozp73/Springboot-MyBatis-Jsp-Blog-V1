@@ -50,4 +50,15 @@
             </div>
         </div>
 
+        <script>
+
+            $.ajax({
+
+            }).done((res) => {
+
+            }).fail((err) => {
+
+            });
+        </script>
+
         <%@ include file="../layout/footer.jsp" %>

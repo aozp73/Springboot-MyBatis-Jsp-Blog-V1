@@ -55,9 +55,15 @@ public class UserController {
         if (userLoginReqDto.getPassword() == null || userLoginReqDto.getPassword().isEmpty()) {
             throw new CustomException("패스워드를 입력해주세요");
         }
-
         User principal = userService.로그인(userLoginReqDto);
         session.setAttribute("principal", principal);
         return "redirect:/";
     }
+
+    @GetMapping("/logout")
+    public String logout() {
+        session.invalidate();
+        return "redirect:/";
+    }
+
 }
