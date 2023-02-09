@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import shop.mtcoding.blog2.dto.user.UserReq.UserJoinReqDto;
 import shop.mtcoding.blog2.dto.user.UserReq.UserLoginReqDto;
 import shop.mtcoding.blog2.handler.ex.CustomException;
+import shop.mtcoding.blog2.model.BoardRepository;
 import shop.mtcoding.blog2.model.User;
 import shop.mtcoding.blog2.model.UserRepository;
 
@@ -48,4 +49,5 @@ public class UserService {
         // session에 넣을 User 반환
         return principal;
     }
+
 }

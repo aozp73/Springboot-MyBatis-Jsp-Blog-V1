@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +21,7 @@ import shop.mtcoding.blog2.handler.ex.CustomException;
 import shop.mtcoding.blog2.model.BoardRepository;
 import shop.mtcoding.blog2.model.User;
 import shop.mtcoding.blog2.service.BoardService;
+import shop.mtcoding.blog2.service.UserService;
 
 @RequiredArgsConstructor
 @Controller
@@ -29,6 +31,19 @@ public class BoardController {
     private final BoardRepository boardRepository;
 
     private final HttpSession session;
+
+    @DeleteMapping("/board/{id}")
+    public ResponseEntity<?> delete(@PathVariable int id) {
+        // 인증
+        User principal = (User) session.getAttribute("principal");
+        if (principal == null) {
+            throw new CustomApiException("로그인이 필요합니다", HttpStatus.UNAUTHORIZED);
+        }
+
+        boardService.게시글삭제(id, principal.getId());
+
+        return new ResponseEntity<>(new ResponseDto<>(1, "게시글이 삭제되었습니다", null), HttpStatus.OK);
+    }
 
     @GetMapping("/board/{id}")
     public String detail(@PathVariable int id, Model model) {
