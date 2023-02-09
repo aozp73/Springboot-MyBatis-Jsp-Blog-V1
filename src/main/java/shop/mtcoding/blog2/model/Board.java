@@ -1,10 +1,12 @@
+package shop.mtcoding.blog2.model;
+
 import java.sql.Timestamp;
 
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
 @Setter
+@Getter
 public class Board {
     private int id;
     private String title;
