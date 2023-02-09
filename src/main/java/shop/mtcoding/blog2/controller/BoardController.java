@@ -5,6 +5,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import shop.mtcoding.blog2.dto.ResponseDto;
 import shop.mtcoding.blog2.dto.board.BoardReq.BoardSaveReqDto;
 import shop.mtcoding.blog2.handler.ex.CustomApiException;
+import shop.mtcoding.blog2.model.BoardRepository;
 import shop.mtcoding.blog2.model.User;
 import shop.mtcoding.blog2.service.BoardService;
 
@@ -22,10 +24,14 @@ import shop.mtcoding.blog2.service.BoardService;
 public class BoardController {
 
     private final BoardService boardService;
+    private final BoardRepository boardRepository;
+
     private final HttpSession session;
 
-    @GetMapping({ "/", "/main" })
-    public String main() {
+    @GetMapping({ "/", "/board" })
+    public String main(Model model) {
+
+        model.addAttribute("dtos", boardRepository.findAllWithUsername());
         return "/board/main";
     }
 
