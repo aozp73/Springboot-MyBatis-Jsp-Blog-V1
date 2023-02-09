@@ -2,9 +2,11 @@ package shop.mtcoding.blog2.model;
 
 import java.sql.Timestamp;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+@AllArgsConstructor
 @Setter
 @Getter
 public class User {
