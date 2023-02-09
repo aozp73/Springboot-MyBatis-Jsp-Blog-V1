@@ -1,0 +1,14 @@
+.my-text-ellipsis {
+    /* 한 줄로 표시 */
+    white-space: nowrap;
+    /* 오버플로우 된 것을 안보이게 */
+    overflow: hidden;
+    /* 오버플로우 된 것을 ..으로 처리 */
+    text-overflow: ellipsis;
+}
+
+.my-grid-4 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-gap: 10px;
+}
