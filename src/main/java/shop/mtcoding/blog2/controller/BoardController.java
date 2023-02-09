@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -15,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import shop.mtcoding.blog2.dto.ResponseDto;
 import shop.mtcoding.blog2.dto.board.BoardReq.BoardSaveReqDto;
 import shop.mtcoding.blog2.handler.ex.CustomApiException;
+import shop.mtcoding.blog2.handler.ex.CustomException;
 import shop.mtcoding.blog2.model.BoardRepository;
 import shop.mtcoding.blog2.model.User;
 import shop.mtcoding.blog2.service.BoardService;
@@ -28,6 +30,12 @@ public class BoardController {
 
     private final HttpSession session;
 
+    @GetMapping("/board/{id}")
+    public String detail(@PathVariable int id, Model model) {
+        model.addAttribute("dto", boardRepository.findByIdWithUsername(id));
+        return "/board/detail";
+    }
+
     @GetMapping({ "/", "/board" })
     public String main(Model model) {
 
@@ -37,6 +45,10 @@ public class BoardController {
 
     @GetMapping("/board/saveForm")
     public String saveForm() {
+        if (session.getAttribute("principal") == null) {
+            throw new CustomException("로그인이 필요합니다");
+        }
+
         return "/board/saveForm";
     }
 
