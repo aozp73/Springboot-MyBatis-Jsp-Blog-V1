@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import shop.mtcoding.blog2.dto.board.BoardReq.BoardSaveReqDto;
+import shop.mtcoding.blog2.dto.board.BoardReq.BoardUpdateReqDto;
 import shop.mtcoding.blog2.handler.ex.CustomApiException;
 import shop.mtcoding.blog2.model.Board;
 import shop.mtcoding.blog2.model.BoardRepository;
@@ -38,7 +39,7 @@ public class BoardService {
         }
 
         // 게시글 userId, 로그인 id 일치 여부
-        if (boardPS.getId() != principalId) {
+        if (boardPS.getUserId() != principalId) {
             throw new CustomApiException("게시글 삭제 권한이 없습니다.", HttpStatus.FORBIDDEN);
         }
 
@@ -49,5 +50,26 @@ public class BoardService {
             throw new CustomApiException("일시적인 서버 문제가 발생했습니다", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
+    }
+
+    public void 게시글수정(BoardUpdateReqDto boardUpdateReqDto, int principalId) {
+        // 게시글 존재 유무
+        Board boardPS = boardRepository.findById(boardUpdateReqDto.getId());
+        if (boardPS == null) {
+            throw new CustomApiException("게시물이 존재하지 않습니다");
+        }
+
+        // 게시글 userId, 세션 id 비교
+        if (boardPS.getUserId() != principalId) {
+            throw new CustomApiException("수정 권한이 없습니다", HttpStatus.UNAUTHORIZED);
+        }
+
+        String thumbnail = Htmlparser.getThumbnail(boardUpdateReqDto.getContent());
+        try {
+            boardRepository.updateById(boardUpdateReqDto.getId(), boardUpdateReqDto.getTitle(),
+                    boardUpdateReqDto.getContent(), thumbnail);
+        } catch (Exception e) {
+            throw new CustomApiException("일시적인 서버 문제가 발생했습니다", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
